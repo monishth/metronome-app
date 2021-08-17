@@ -1,6 +1,6 @@
 import './App.css';
-import Metronome from './components/Metronome';
-import Header from './components/Header';
+import Metronome from './Metronome';
+import Header from './Header';
 
 function App() {
   return (
