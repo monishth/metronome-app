@@ -1,0 +1,57 @@
+.metronome {
+  min-width: 90vw;
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 1rem;
+  justify-content: space-around;
+}
+
+.metronome-play-button {
+  max-width: 30vw;
+}
+
+.metronome-play-button-flash {
+  filter: brightness(0%);
+}
+
+.metronome-bpm-controls {
+  display: inline;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+
+.metronome-bpm-controls-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (min-width: 570px) {
+  .metronome-bpm-controls-container {
+    display: block;
+  }
+
+  .metronome-bpm-controls {
+    margin: 1rem;
+  }
+}
+
+.metronome-button {
+  border: none;
+  text-decoration: none;
+  display: inline-block;
+  padding: 15px 32px;
+}
+
+input {
+  max-width: 5rem;
+}
+
+.play-button {
+  max-height: 10vh;
+}
