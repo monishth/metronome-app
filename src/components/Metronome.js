@@ -23,7 +23,7 @@ const Metronome = () => {
     // so a local variable is used
     let newIsPlaying = !isPlaying;
     if (newIsPlaying) {
-      //If the metronome needs to be started. also checks to make sure one isnt running
+      // If the metronome needs to be started. also checks to make sure one isnt running
       if (metronomeID.current) {
         clearInterval(metronomeID.current);
       }
@@ -37,21 +37,19 @@ const Metronome = () => {
     }
   };
 
-  // executes setInterval to start metronome
+  // Executes setInterval to start metronome
   const createMetronome = (bpm) => {
     return setInterval(() => audio.play(), 60000 / bpm);
   };
 
-  // updates bpm state variable and creates new metronome (setInterval) if the metronome
+  // Updates bpm state variable and creates new metronome (setInterval) if the metronome
   // is currently playing
   const updateBPM = (newBPM) => {
-    if (newBPM >= 35 && newBPM <= 210) {
-      // Only executes if the bpm is within regular values
-      setBPM(newBPM);
-      if (isPlaying) {
-        clearInterval(metronomeID.current);
-        metronomeID.current = createMetronome(newBPM);
-      }
+    // Only executes if the bpm is within regular values
+    setBPM(newBPM);
+    if (isPlaying && newBPM >= 30 && newBPM <= 210) {
+      clearInterval(metronomeID.current);
+      metronomeID.current = createMetronome(newBPM);
     }
   };
 
@@ -72,6 +70,17 @@ const Metronome = () => {
     }
   };
 
+  // When the text area loses focues, ensure the bpm is within bounds so that the displayed bpm is always
+  // Cant do this onChange as it may take multiple key strokes to type a number and the value inbetween
+  // could be erroneous
+  const constrainBPM = (e) => {
+    if (bpm > 210) {
+      updateBPM(210);
+    } else if (bpm < 30) {
+      updateBPM(30);
+    }
+  };
+
   return (
     <div>
       <img src={play_button} alt="play button" onClick={togglePlaying} />
@@ -79,7 +88,12 @@ const Metronome = () => {
         <button type="button" onClick={() => updateBPM(bpm - 10)}>
           Decrease BPM
         </button>
-        {bpm}
+        <input
+          type="text"
+          value={bpm}
+          onChange={(e) => updateBPM(e.target.value)}
+          onBlur={(e) => constrainBPM(e)}
+        />
         <button type="button" onClick={() => updateBPM(bpm + 10)}>
           Increase BPM
         </button>
