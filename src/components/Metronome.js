@@ -1,12 +1,12 @@
 import React from 'react';
 import metronome_click from '../assets/single_metronome_sound.flac';
 import play_button from '../assets/download.png';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 const Metronome = () => {
   //Normal JS Audio object
   const audio = new Audio(metronome_click);
   const [intervalID, setIntervalID] = useState(null);
-  const [playing, setPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [metronomeSettings, setMetronomeSettings] = useState({
     bpm: 100,
     period: 60000 / 100,
@@ -14,34 +14,60 @@ const Metronome = () => {
 
   //triggered by start on stop button when needed
   const togglePlaying = () => {
-    setPlaying((playing) => !playing);
-    console.log(playing);
-    if (playing) {
+    console.log(isPlaying);
+    let newIsPlaying = !isPlaying;
+    if (newIsPlaying) {
+      if (intervalID) {
+        clearInterval(intervalID);
+      }
       setIntervalID(setInterval(() => audio.play(), metronomeSettings.period));
-      //audio.play();
-      console.log('playing', playing, intervalID);
+      audio.play();
+      console.log('playing', newIsPlaying, intervalID);
     } else {
-      console.log('clearing', playing, intervalID);
+      console.log('clearing', newIsPlaying, intervalID);
       clearInterval(intervalID);
+      setIntervalID(null);
     }
+
+    setIsPlaying((playing) => !playing);
   };
 
   //function to test increasing bpm while the interval is already going
-  const incrementBPM = (addbpm) => {
-    setMetronomeSettings({
-      bpm: metronomeSettings.bpm + addbpm,
-      period: 60000 / (metronomeSettings.bpm + addbpm),
-    });
-    clearInterval(intervalID);
-    setIntervalID(setInterval(() => audio.play(), metronomeSettings.period));
+
+  const setBPM = (newBPM) => {
+    if (newBPM >= 35 && newBPM < 210) {
+      setMetronomeSettings({
+        bpm: newBPM,
+        period: 60000 / newBPM,
+      });
+      if (isPlaying) {
+        clearInterval(intervalID);
+        setIntervalID(
+          setInterval(() => audio.play(), metronomeSettings.period)
+        );
+        audio.play();
+      }
+    }
   };
 
   return (
     <div>
-      <img src={play_button} alt="loool" onClick={togglePlaying} />
-      <button type="button" onClick={() => incrementBPM(10)}>
-        add some uno
-      </button>
+      <img src={play_button} alt="play button" onClick={togglePlaying} />
+      <div>
+        <button
+          type="button"
+          onClick={() => setBPM(metronomeSettings.bpm - 10)}
+        >
+          Decrease BPM
+        </button>
+        {metronomeSettings.bpm}
+        <button
+          type="button"
+          onClick={() => setBPM(metronomeSettings.bpm + 10)}
+        >
+          Increase BPM
+        </button>
+      </div>
     </div>
   );
 };
