@@ -19,7 +19,6 @@ const Metronome = () => {
 
   // Handles the starting/stopping of the current metronome
   const togglePlaying = () => {
-    console.log(isPlaying);
     setIsPlaying((playing) => !playing);
     // The updated state isn't within the scope of this closure until the re-render
     // so a local variable is used
@@ -31,9 +30,7 @@ const Metronome = () => {
       }
       metronomeID.current = createMetronome(bpm);
       audio.play(); // So that the metronome starts on button press instead of after the initial interval
-      console.log('playing', newIsPlaying, metronomeID.current);
     } else {
-      console.log('clearing', newIsPlaying, metronomeID.current);
       clearInterval(metronomeID.current);
       metronomeID.current = null;
     }
